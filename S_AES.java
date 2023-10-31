@@ -11,9 +11,10 @@ public class S_AES {
 
     JFrame f1,f2,f3,f4,f5,f6;
     JButton b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14,b15,b16,b17,b18,b19;
-    JTextField text1,text2,text3,text4,text5,text6,text7,text8,text9,text10;
-    JLabel label1,label2,label3,label4,label5,label6,label7,label8,label9,label10,label11,label12,label13,label14,label15;
-    myListener listener1,listener5,listener6,listener12,listener13,listener14,listener15,listener17,listener18;
+    JTextField text1,text2,text3,text4,text5,text6,text7,text8,text9,text10,text11;
+    JLabel label1,label2,label3,label4,label5,label6,label7,label8,label9,label10,label11,label12,label13,label14,label15,label16;
+    myListener listener1,listener5,listener6,listener12,listener13,listener14,listener15;
+    anotherListener listener17,listener18;
     ActionListener listener2,listener3,listener4,listener7,listener8,listener9,listener10,listener11,listener16,listener19;
 
     public static void main(String[] args) {
@@ -220,12 +221,12 @@ public class S_AES {
         {0, 7, 14, 9, 15, 8, 1, 6, 13, 10, 3, 4, 2, 5, 12, 11},
         {0, 8, 3, 11, 6, 14, 5, 13, 12, 4, 15, 7, 10, 2, 9, 1},
         {0, 9, 1, 8, 2, 11, 3, 10, 4, 13, 5, 12, 6, 15, 7, 14},
-        {0, 10, 7, 13, 14, 4, 9, 3, 15, 5, 8, 2, 1, 11, 6, 12},
+        {0, 10, 7, 13, 14, 4, 9, 15, 15, 5, 8, 2, 1, 11, 6, 12},
         {0, 11, 5, 14, 10, 1, 15, 4, 7, 12, 2, 9, 13, 6, 8, 3},
-        {0, 12, 11, 7, 5, 9, 14, 2, 10, 6, 1, 13, 15, 3, 4, 8},
+        {0, 12, 11, 7, 5, 9, 3, 15, 10, 6, 14, 2, 15, 3, 12, 4},
         {0, 13, 9, 4, 1, 12, 8, 5, 2, 15, 11, 6, 3, 14, 10, 7},
-        {0, 14, 15, 1, 13, 3, 2, 12, 9, 7, 6, 8, 4, 10, 11, 5},
-        {0, 15, 13, 2, 9, 6, 4, 11, 1, 14, 12, 3, 8, 7, 5, 10}
+        {0, 14, 15, 1, 13, 3, 7, 11, 9, 7, 6, 8, 4, 2, 2, 13, 12},
+        {0, 15, 13, 2, 9, 6, 4, 3, 1, 14, 12, 11, 7, 8, 10, 5}
     };
 
     public static String addRoundKey(String state, String roundKey) {
@@ -404,28 +405,25 @@ public class S_AES {
     }
 
     public static String doudecrypt(String Key, String Ciphertext) {
-        String K1 = Key.substring(0,4);
-        String K2 = Key.substring(4);
-        K1 = hexToBinary(K1);
-        K2 = hexToBinary(K2);
+        Key = hexToBinary(Key);
+        String K1 = Key.substring(0,16);
+        String K2 = Key.substring(16);
         String plaintext = decrypt(decrypt(Ciphertext, K2), K1);
         return plaintext;
     }
 
     public static String triencrypt(String Key, String plaintext) {
-        String K1 = Key.substring(0,4);
-        String K2 = Key.substring(4);
-        K1 = hexToBinary(K1);
-        K2 = hexToBinary(K2);
+        Key = hexToBinary(Key);
+        String K1 = Key.substring(0,16);
+        String K2 = Key.substring(16);
         String Ciphertext = encrypt(decrypt(encrypt(plaintext, K1), K2), K1);
         return Ciphertext;
     }
 
     public static String tridecrypt(String Key, String Ciphertext) {
-        String K1 = Key.substring(0,4);
-        String K2 = Key.substring(4);
-        K1 = hexToBinary(K1);
-        K2 = hexToBinary(K2);
+        Key = hexToBinary(Key);
+        String K1 = Key.substring(0,16);
+        String K2 = Key.substring(16);
         String plaintext = decrypt(encrypt(decrypt(Ciphertext, K1), K2), K1);
         return plaintext;
     }
@@ -635,8 +633,8 @@ public class S_AES {
         text7.addActionListener(listener15);
         text8.addActionListener(listener15);
         label10 = new JLabel("请输入密钥(16进制输入,K1+K2):");
-        label11 = new JLabel("请输入明/密文(16位):");
-        label12 = new JLabel("本次加/解密的结果是：");
+        label11 = new JLabel("请输入密文(16位):");
+        label12 = new JLabel("本次解密的结果是：");
         f5.add(label10);
         f5.add(text7);
         f5.add(label11);
@@ -658,21 +656,29 @@ public class S_AES {
         b19.addActionListener(listener19);
         text9 = new JTextField(10);
         text10 = new JTextField(10);
+        text11 = new JTextField(10);
         listener17.setJTextField1(text9);
         listener17.setJTextField2(text10);
+        listener17.setJTextField3(text11);
         listener18.setJTextField1(text9);
         listener18.setJTextField2(text10);
+        listener18.setJTextField3(text11);
         text9.addActionListener(listener17);
         text10.addActionListener(listener17);
+        text11.addActionListener(listener17);
         text9.addActionListener(listener18);
         text10.addActionListener(listener18);
+        text11.addActionListener(listener18);
         label13 = new JLabel("请输入密钥(16位):");
         label14 = new JLabel("请输入明/密文(ASCII码形式):");
         label15 = new JLabel("本次加/解密的结果是：");
+        label16 = new JLabel("请输入初始向量(16位):");
         f6.add(label13);
         f6.add(text9);
         f6.add(label14);
         f6.add(text10);
+        f6.add(label16);
+        f6.add(text11);
         f6.add(b17);
         f6.add(b18);
         f6.add(b19);
@@ -683,6 +689,13 @@ public class S_AES {
         public void setJTextField1(JTextField text);
         public void setJTextField2(JTextField text);
     }
+
+    public interface anotherListener extends ActionListener{
+        public void setJTextField1(JTextField text);
+        public void setJTextField2(JTextField text);
+        public void setJTextField3(JTextField text);
+    }
+
     public class action1 implements myListener{
         JTextField textInput1;
         JTextField textInput2;
@@ -867,7 +880,7 @@ public class S_AES {
                 }
                 else{
                     boolean flag = true;
-                    for(int i =	 0; i<s1.length(); i++){
+                    for(int i = 0; i<s1.length(); i++){
                         if(s1.substring(i, i+1).equals("0")||s1.substring(i, i+1).equals("1")){}
                         else{
                             JOptionPane.showMessageDialog(f1,"请重新输入", "输入格式有误！", JOptionPane.WARNING_MESSAGE);
@@ -944,8 +957,8 @@ public class S_AES {
                     }
                 }
                 if(flag){
-                	//String ciphertext;
-                    String ciphertext = triencrypt(s1, s2);
+                    String ciphertext;
+                    ciphertext = triencrypt(s1, s2);
                     label12.setText("本次加密的结果是："+ciphertext);
                 }
             }
@@ -993,38 +1006,48 @@ public class S_AES {
             }
     }
 
-    public class action17 implements myListener{
+    public class action17 implements anotherListener{
         JTextField textInput1;
         JTextField textInput2;
+        JTextField textInput3;
         public void setJTextField1(JTextField text){
             textInput1 = text;
         }
         public void setJTextField2(JTextField text){
             textInput2 = text;
+        }
+        public void setJTextField3(JTextField text){
+            textInput3 = text;
         }
         public void actionPerformed(java.awt.event.ActionEvent e){
             String s1 = textInput1.getText();
             String s2 = textInput2.getText();
+            String s3 = textInput3.getText();
             String ciphertext;
-            ciphertext = encryptCBC(s2, s1,"0000000000000000");
+            ciphertext = encryptCBC(s2, s1,s3);
             label15.setText("本次加密的结果是："+ciphertext);
             }
     }
 
-    public class action18 implements myListener{
+    public class action18 implements anotherListener{
         JTextField textInput1;
         JTextField textInput2;
+        JTextField textInput3;
         public void setJTextField1(JTextField text){
             textInput1 = text;
         }
         public void setJTextField2(JTextField text){
             textInput2 = text;
         }
+        public void setJTextField3(JTextField text){
+            textInput3 = text;
+        }
         public void actionPerformed(java.awt.event.ActionEvent e){
             String s1 = textInput1.getText();
-            String s2 = textInput2.getText();              
+            String s2 = textInput2.getText();
+            String s3 = textInput3.getText();              
             String plaintext;
-            plaintext = decryptCBC(s2, s1,"0000000000000000");
+            plaintext = decryptCBC(s2, s1,s3);
             label15.setText("本次解密的结果是："+plaintext);
         }
     }
